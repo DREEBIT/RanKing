@@ -1,0 +1,9 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "main": "app.js",
+  "description": "GoogleSearchRanking",
+  "dependencies": {
+    "moment": "^2.11.1"
+  }
+}
