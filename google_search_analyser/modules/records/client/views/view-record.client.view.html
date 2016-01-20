@@ -1,0 +1,11 @@
+<section data-ng-controller="RecordsController" data-ng-init="findOneKeyword()">
+    <div class="page-header">
+        <h1 data-ng-bind="records[0].keyword"></h1>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="chart1" height="400" width="400" class="chart chart-line"
+                chart-data="data" chart-labels="labels" chart-legend="true"  chart-series="series">
+        </canvas>
+    </div>
+</section>

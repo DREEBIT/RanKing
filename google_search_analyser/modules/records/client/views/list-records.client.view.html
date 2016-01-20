@@ -1,0 +1,21 @@
+<section data-ng-controller="RecordsController" data-ng-init="find()">
+  <div class="page-header">
+    <h1>{{title}}</h1>
+    <form name="form" novalidate>
+      <formly-form model="searchText" fields="fields" form="form">
+      </formly-form>
+    </form>
+  </div>
+
+  <div class="list-group">
+    <a data-ng-repeat="keyword in keywords | orderBy:'keyword' | filter: searchText.searchText"
+       data-ui-sref="records.view({keyword: keyword})" class="list-group-item">
+      <small>
+        <span data-ng-bind="keyword"></span>
+      </small>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" data-ng-if="keywords.$resolved && !keywords.length">
+    No records yet, why don't you launch your bot?
+  </div>
+</section>
