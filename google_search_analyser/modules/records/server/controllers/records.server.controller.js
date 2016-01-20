@@ -88,11 +88,9 @@ exports.list = function (req, res) {
 /**
  * List of Records
  */
-exports.listKeywords = function (req, res, keyword) {
+exports.listKeywords = function (req, res) {
 
-    console.log('test');
-
-    Record.find({keyword: keyword}).sort('-created').populate('user', 'displayName').exec(function (err, records) {
+    Record.find({keyword: req.params.keyword}).sort('-created').populate('user', 'displayName').exec(function (err, records) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
@@ -106,9 +104,7 @@ exports.listKeywords = function (req, res, keyword) {
 /**
  * Record middleware
  */
-exports.recordByID = function (req, res, next, keyword) {
-
-    console.log(keyword);
+exports.recordByKeyword = function (req, res, next, keyword) {
 
     Record.find({keyword: keyword}).populate('user', 'displayName').exec(function (err, record) {
         if (err) {
@@ -120,7 +116,7 @@ exports.recordByID = function (req, res, next, keyword) {
         }
         req.keyword = record[0].keyword;
 
-        next(keyword);
+        next();
     });
 
 };

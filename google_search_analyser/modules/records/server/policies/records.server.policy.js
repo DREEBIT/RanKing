@@ -18,7 +18,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/records',
       permissions: '*'
     }, {
-      resources: '/api/records/:recordId',
+      resources: '/api/records/:keyword',
       permissions: '*'
     }]
   }, {
@@ -27,7 +27,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/records',
       permissions: ['get', 'post']
     }, {
-      resources: '/api/records/:recordId',
+      resources: '/api/records/:keyword',
       permissions: ['get']
     }]
   }, {
@@ -36,7 +36,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/records',
       permissions: ['get']
     }, {
-      resources: '/api/records/:recordId',
+      resources: '/api/records/:keyword',
       permissions: ['get']
     }]
   }]);

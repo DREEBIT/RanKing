@@ -84,7 +84,8 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
         };
 
         // Find existing Records for Keyword
-        $scope.findOneKeyword = function () {
+        $scope.findRecordsForKeyword = function () {
+            console.log($stateParams);
             $scope.records = Records.query({
                 keyword: $stateParams.keyword
             }, function(){

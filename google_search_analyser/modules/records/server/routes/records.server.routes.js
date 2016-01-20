@@ -17,9 +17,8 @@ module.exports = function (app) {
         .get(records.list);*/
 
     app.route('/api/records/:keyword').all(recordsPolicy.isAllowed)
-        .get(records.listKeywords)
-        .post(records.create);
+        .get(records.listKeywords);
 
     // Finish by binding the record middleware
-    app.param('keyword', records.recordByID);
+    app.param('keyword', records.recordByKeyword);
 };
