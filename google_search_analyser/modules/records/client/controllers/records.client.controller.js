@@ -9,13 +9,84 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
 
         $scope.fields = [
             {
-                key: 'searchText',
+                key: 'search',
                 type: 'input',
                 templateOptions: {
                     label: 'Search'
                 }
             }
         ];
+
+        $scope.viewfields = [
+            {
+                key: 'date',
+                type: 'input',
+                templateOptions: {
+                    label: 'Search'
+                }
+            }
+        ];
+
+        $scope.filteredRecords = [];
+
+        $scope.domainsToFilter = ['dreebit.com', 'dreebit-service.eu', 'vsm-cloud.com'];
+
+        $scope.sort = function(a,b){
+            if (a < b)
+                return -1;
+            else if (a > b)
+                return 1;
+            else
+                return 0;
+        };
+
+        $scope.prepareChart = function(){
+
+            $scope.chart = {
+                labels: [],
+                series: $scope.domainsToFilter,
+                data: [],
+                options: {
+                    bezierCurve: true
+                }
+            };
+            //Get recorded Dates
+            $scope.records.forEach(function(record, index, array) {
+
+                if ($scope.chart.labels.indexOf(record.date) < 0)
+                    $scope.chart.labels.push(record.date);
+            });
+
+            //Sort Dates
+            $scope.chart.labels.sort($scope.sort());
+
+            //Prepare Data Array
+            for(var i = 0; i < $scope.chart.series.length; i++){
+                var dataIndex = [];
+                for(var j = 0; j < $scope.chart.labels.length; j++){
+                    dataIndex.push(null);
+                }
+                $scope.chart.data.push(dataIndex);
+            }
+        };
+
+        //Populate Chart with Ranks from Records
+        $scope.populateChartData = function(){
+            $scope.prepareChart();
+
+            //iterate through all records
+            $scope.records.forEach(function(record) {
+                $scope.chart.series.forEach(function(serie, seriesIndex){
+                    if (record.link.indexOf(serie) > -1) {
+                        $scope.chart.labels.forEach(function(label, labelIndex){
+                            if (record.date.indexOf(label) > -1) {
+                                $scope.chart.data[seriesIndex][labelIndex] = record.rank;
+                            }
+                        });
+                    }
+                });
+            });
+        };
 
         // Create new Record
         $scope.create = function () {
@@ -85,13 +156,11 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
 
         // Find existing Records for Keyword
         $scope.findRecordsForKeyword = function () {
-            console.log($stateParams);
             $scope.records = Records.query({
                 keyword: $stateParams.keyword
             }, function(){
-                console.log('findOneKeyword in FE' + $scope.records);
-                console.log('findOneKeyword in FE' + $scope.records);
 
+                $scope.populateChartData();
             });
         };
     }

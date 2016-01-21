@@ -8,7 +8,7 @@
   </div>
 
   <div class="list-group">
-    <a data-ng-repeat="keyword in keywords | orderBy:'keyword' | filter: searchText.searchText"
+    <a data-ng-repeat="keyword in keywords | orderBy:'keyword' | filter: searchText.search"
        data-ui-sref="records.view({keyword: keyword})" class="list-group-item">
       <small>
         <span data-ng-bind="keyword"></span>
