@@ -1,10 +1,14 @@
 console.log('running ...');
 
-var http = require('http');
+var request = require('request');
+var settings = require("./settings.json");
+var _ = require("underscore");
+var fs = require('fs');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/googleSearchBot');
 
+var date = new Date();
 var Record = mongoose.model('Record', mongoose.Schema({
     date: {
         type: Date
@@ -20,74 +24,97 @@ var Record = mongoose.model('Record', mongoose.Schema({
     }
 }));
 
-var keywords = require('./keywords.json');
-var date = new Date();
-var requests = [];
+var allKeywords = require('./keywords.json');
+var fetchKeywordIndizes = _.range(settings.start, settings.start+settings.keywordsPerDay);
 
-prepareRequests = function (keywords) {
-    while(keywords.length > 0) {
-        var keyword = keywords.shift();
-        //iteration to do 2 requests a 8 results each keyword
-        for (var i = 0; i < 2; i++) {
-            var j = i * 8;
+console.log(fetchKeywordIndizes);
 
-            requests.push(
-                {
-                    page: i,
-                    start: j,
-                    keyword: keyword,
-                    requestUrl: 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=8&q=' + keyword + '&start=' + j
-                }
-            );
-        }
-    }
-};
-prepareRequests(keywords);
+var fetchKeyword = function(callback){
 
-var dbDisconnect = function(){
-    mongoose.disconnect(function () {
-        console.log('Mongoose disconnected');
-        process.exit(0);
-    });
+	if (fetchKeywordIndizes.length > 0){
+		var fetchIndex = fetchKeywordIndizes.shift();
+
+
+		var index = fetchIndex % allKeywords.length;
+		fetchPage(index,0,function(){
+			fetchKeyword(callback);
+		});
+	}else {
+		if (typeof callback === "function"){
+			callback();
+		}
+	}
+
 };
 
-doRequests = function(requests) {
 
-    if (requests.length) {
-        var request = requests.shift();
+var fetchPage = function(keywordIndex, index, callback){
 
-        http.request(request.requestUrl,
-            function (response) {
-                var str = '';
-                //another chunk of data has been received, so append it to `str`
-                response.on('data', function (chunk) {
-                    str += chunk;
+	var keyword = allKeywords[index];
+	var url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=8&q=' + keyword + '&start=' + index
 
-                });
+	console.log("[Request]");
+	console.log("Keyword: "+keyword);
+	console.log("Page: "+index);
+	console.log("--------------------");
 
-                //the whole response has been received, so we just print it out here
-                response.on('end', function () {
-                    json = JSON.parse(str);
+	request(url, function (error, response, body) {
 
-                    if (json.responseData != null) {
-                        for (var pageIndex = 1; pageIndex < 9; pageIndex++) {
+		if (!error && response.statusCode == 200) {
 
-                            var e = new Record({
-                                date: date,
-                                keyword: request.keyword,
-                                rank: pageIndex + request.start,
-                                link: json.responseData.results[pageIndex - 1].url
-                            });
+			var json = JSON.parse(body);
+			if (json.responseData != null) {
+				for (var itemIndex = 1; itemIndex < 9; itemIndex++) {
 
-                            e.save(function (err, obj) {
-                                if (err) console.log('error while saving');
-                            });
-                        }
-                    }
-                    doRequests(requests);
-                })
-            }).end();
-    }
+					var e = new Record({
+						date: date,
+						keyword: keyword,
+						rank: index + itemIndex,
+						link: json.responseData.results[itemIndex - 1].url
+					});
+
+					e.save(function (err, obj) {
+						if (err) console.log('error while saving');
+					});
+				}
+			}
+
+		} else {
+			console.log("Got an error: ", error, ", status code: ", response.statusCode);
+		}
+
+		if (++index < settings.pageLimit){
+			fetchPage(keywordIndex, index, callback);
+		}else {
+
+
+			settings.start = index;
+			if (settings.start > allKeywords.length){
+				settings.start = 0;
+			}
+
+			fs.writeFile("./settings.json", JSON.stringify(settings), function(err){
+				if (typeof callback === "function"){
+					callback();
+				}
+			});
+
+
+
+		}
+
+	});
+
+
 };
 
-doRequests(requests);
+
+fetchKeyword(function(){
+
+	mongoose.disconnect(function () {
+		console.log('Mongoose disconnected');
+		process.exit(0);
+	});
+
+});
+

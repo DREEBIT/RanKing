@@ -4,6 +4,8 @@
   "main": "app.js",
   "description": "GoogleSearchRanking",
   "dependencies": {
-    "mongoose": "^4.3.5"
+    "mongoose": "^4.3.5",
+    "request": "^2.67.0",
+    "underscore": "^1.8.3"
   }
 }
