@@ -6,6 +6,9 @@
 var app = require('./config/lib/app');
 var server = app.start();
 
+
+console.log('STARTING BOT EVERY 3 HOURS');
+
 var bot = require('./modules/records/server/controllers/bot.server.controller');
 var later = require('later');
 
