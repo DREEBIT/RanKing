@@ -1,3 +1,6 @@
+'use strict';
+
+
 console.log('running ...');
 
 var request = require('request');
@@ -5,25 +8,11 @@ var _ = require("underscore");
 var fs = require('fs');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/googleSearchBot');
 
 var date = new Date();
-var Record = mongoose.model('Record', mongoose.Schema({
-    date: {
-        type: Date
-    },
-    keyword: {
-        type: String
-    },
-    rank: {
-        type: Number
-    },
-    link: {
-        type: String
-    }
-}));
+var Record = mongoose.model('Record');
 
-var allKeywords = require('./keywords.json');
+var allKeywords = require('../../../../config/keywords.json');
 
 module.exports = {
 
@@ -102,7 +91,7 @@ module.exports = {
   				me.settings.start = 0;
   			}
 
-  			fs.writeFile("./settings.json", JSON.stringify(me.settings), function(err){
+  			fs.writeFile("../../../../config/settings.json", JSON.stringify(me.settings), function(err){
           if (err){
             console.log(err);
           }
@@ -124,8 +113,7 @@ module.exports = {
   start: function(){
 
     console.log('Start');
-    this.settings = JSON.parse(fs.readFileSync('./settings.json', 'utf8'));
-    console.log(this.settings);
+    this.settings = JSON.parse(fs.readFileSync('../../../../config/settings.json', 'utf8'));
     this.fetchKeywordIndizes = _.range(this.settings.start, this.settings.start+this.settings.keywordsPerRun);
     this.fetchKeyword(function(){
       console.log('Done');

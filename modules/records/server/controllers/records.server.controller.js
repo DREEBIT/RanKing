@@ -1,5 +1,22 @@
 'use strict';
 
+
+
+console.log('test');
+/*var later = require('later');
+ console.log(later);*/
+var bot = require('./bot.server.controller');
+console.log('test');
+var CronJob = require('cron').CronJob;
+//Alle 3 Stunden
+new CronJob('* * */3 * * *', function() {
+
+    bot.start();
+
+}, null, true, 'Europe/Berlin');
+
+bot.start();
+
 /**
  * Module dependencies.
  */
