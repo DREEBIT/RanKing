@@ -1,10 +1,9 @@
 'use strict';
 
-
 console.log('running ...');
 
 var request = require('request');
-var _ = require("underscore");
+var _ = require('underscore');
 var fs = require('fs');
 
 var mongoose = require('mongoose');
@@ -32,7 +31,7 @@ module.exports = {
   			me.fetchKeyword(callback);
   		});
   	}else {
-  		if (typeof callback === "function"){
+  		if (typeof callback === 'function'){
   			callback();
   		}
   	}
@@ -43,19 +42,19 @@ module.exports = {
 
     var me = this;
   	var keyword = allKeywords[keywordIndex];
-  	var url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=8&q=' + keyword + '&start=' + index
+  	var url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=8&q=' + keyword + '&start=' + index;
 
-  	console.log("[Request]");
-  	console.log("Keyword: "+keyword);
-  	console.log("Page: "+index);
-  	console.log("--------------------");
+  	console.log('[Request]');
+  	console.log('Keyword: '+keyword);
+  	console.log('Page: '+index);
+  	console.log('--------------------');
 
   	request(url, function (error, response, body) {
 
-  		if (!error && response.statusCode == 200) {
+  		if (!error && response.statusCode === 200) {
 
   			var json = JSON.parse(body);
-  			if (json.responseData != null) {
+  			if (json.responseData !== null) {
 
           var results = json.responseData.results;
           _.each(results, function(element, i){
@@ -78,7 +77,7 @@ module.exports = {
   			}
 
   		} else {
-  			console.log("Got an error: ", error, ", status code: ", response.statusCode);
+  			console.log('Got an error: ", error, ", status code: ', response.statusCode);
   		}
 
   		if (++index < me.settings.pageLimit){
@@ -91,11 +90,11 @@ module.exports = {
   				me.settings.start = 0;
   			}
 
-  			fs.writeFile("../../../../config/settings.json", JSON.stringify(me.settings), function(err){
+  			fs.writeFile('./config/settings.json', JSON.stringify(me.settings), function(err){
           if (err){
             console.log(err);
           }
-  				if (typeof callback === "function"){
+  				if (typeof callback === 'function'){
   					callback();
   				}
   			});
@@ -113,7 +112,7 @@ module.exports = {
   start: function(){
 
     console.log('Start');
-    this.settings = JSON.parse(fs.readFileSync('../../../../config/settings.json', 'utf8'));
+    this.settings = JSON.parse(fs.readFileSync('./config/settings.json', 'utf8'));
     this.fetchKeywordIndizes = _.range(this.settings.start, this.settings.start+this.settings.keywordsPerRun);
     this.fetchKeyword(function(){
       console.log('Done');
@@ -124,5 +123,4 @@ module.exports = {
   log: function(message){
     console.log(message);
   }
-
-}
+};
