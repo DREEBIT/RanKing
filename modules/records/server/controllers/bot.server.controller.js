@@ -8,105 +8,116 @@ var fs = require('fs');
 
 var mongoose = require('mongoose');
 
-var date = new Date();
+
 var Record = mongoose.model('Record');
 
 var allKeywords = require('../../../../config/keywords.json');
 
 module.exports = {
 
-	fetchKeywordIndizes: [],
+    date: new Date(),
 
-	settings: {},
+    fetchKeywordIndizes: [],
 
-	fetchKeyword: function(callback){
+    settings: {},
 
-		var me = this;
-		if (this.fetchKeywordIndizes.length > 0){
-			var fetchIndex = this.fetchKeywordIndizes.shift();
-			var index = fetchIndex % allKeywords.length;
-			this.fetchPage(index,0,function(){
-				me.fetchKeyword(callback);
-			});
-		}else {
-			if (typeof callback === 'function'){
-				callback();
-			}
-		}
-	},
+    fetchKeyword: function(callback){
 
-	fetchPage: function(keywordIndex, index, callback){
+        var me = this;
+        if (this.fetchKeywordIndizes.length > 0){
+            var fetchIndex = this.fetchKeywordIndizes.shift();
+            var index = fetchIndex % allKeywords.length;
+            this.fetchPage(index,0,function(){
+                me.fetchKeyword(callback);
+            });
+        }else {
+            if (typeof callback === 'function'){
+                callback();
+            }
+        }
+    },
 
-		var me = this;
-		var keyword = allKeywords[keywordIndex];
-		var url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=8&q=' + keyword + '&start=' + index;
+    fetchPage: function(keywordIndex, index, callback){
 
-		console.log('[Request]');
-		console.log('Keyword: '+keyword);
-		console.log('Page: '+index);
-		console.log('--------------------');
+        var me = this;
+        var keyword = allKeywords[keywordIndex];
+        var url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=8&q=' + keyword + '&start=' + index;
 
-		request(url, function (error, response, body) {
+        var options = {
+            url: url,
+            headers: {
+                'Accept-Language': 'de-DE, de'
+            }
+        };
 
-			if (!error && response.statusCode === 200) {
+        console.log('[Request]');
+        console.log('Keyword: '+keyword);
+        console.log('Page: '+index);
+        console.log('--------------------');
 
-				var json = JSON.parse(body);
-				if (json.responseData !== null) {
+        request(options, function (error, response, body) {
 
-					var results = json.responseData.results;
-					_.each(results, function(element, i){
-						var results = json.responseData.results;
+            if (!error && response.statusCode === 200) {
 
-						var r = new Record({
-							date: date,
-							keyword: keyword,
-							rank: (index * 8) + i + 1,
-							link: element.url
-						});
+                var json = JSON.parse(body);
+                if (json.responseData !== null) {
 
-						r.save(function (err, obj) {
-							if (err) console.log('error while saving');
-						});
+                    var results = json.responseData.results;
 
-					});
-				}
-			} else {
-				console.log('Got an error: ", error, ", status code: ', response.statusCode);
-			}
+                    _.each(results, function(element, i){
+                        var results = json.responseData.results;
 
-			if (++index < me.settings.pageLimit){
-				me.fetchPage(keywordIndex, index, callback);
-			}else {
+                        var r = new Record({
+                            date: me.date,
+                            keyword: keyword,
+                            rank: (index * 8) + i + 1,
+                            link: element.url
+                        });
 
-				me.settings.start = keywordIndex+1;
-				if (me.settings.start > allKeywords.length){
-					me.settings.start = 0;
-				}
+                        r.save(function (err, obj) {
+                            if (err) console.log('error while saving');
+                        });
 
-				fs.writeFile('./config/settings.json', JSON.stringify(me.settings), function(err){
-					if (err){
-						console.log(err);
-					}
-					if (typeof callback === 'function'){
-						callback();
-					}
-				});
-			}
-		});
-	},
+                    });
+                }
+            } else {
+                console.log('Got an error: ", error, ", status code: ', response.statusCode);
+            }
 
-	start: function(){
+            if (++index < me.settings.pageLimit){
+                me.fetchPage(keywordIndex, index, callback);
+            }else {
 
-		console.log('Start Requesting');
-		this.settings = JSON.parse(fs.readFileSync('./config/settings.json', 'utf8'));
-		this.fetchKeywordIndizes = _.range(this.settings.start, this.settings.start+this.settings.keywordsPerRun);
-		this.fetchKeyword(function(){
-			console.log('Done');
-		});
-	},
+                me.settings.start = keywordIndex+1;
+                if (me.settings.start > allKeywords.length){
+                    me.settings.start = 0;
+                }
 
-	log: function(message){
+                fs.writeFile('./config/settings.json', JSON.stringify(me.settings), function(err){
+                    if (err){
+                        console.log(err);
+                    }
+                    if (typeof callback === 'function'){
+                        callback();
+                    }
+                });
+            }
+        });
+    },
 
-		console.log(message);
-	}
+    start: function(){
+
+        console.log('Start Requesting');
+        this.date = new Date();
+        this.settings = JSON.parse(fs.readFileSync('./config/settings.json', 'utf8'));
+        this.fetchKeywordIndizes = _.range(this.settings.start, this.settings.start+this.settings.keywordsPerRun);
+        this.fetchKeyword(function(){
+            console.log('Done');
+        });
+    },
+
+    log: function(message){
+
+        console.log(message);
+    }
 };
