@@ -57,14 +57,14 @@ module.exports = {
 					_.each(results, function(element, i){
 						var results = json.responseData.results;
 
-						var e = new Record({
+						var r = new Record({
 							date: date,
 							keyword: keyword,
-							rank: index + i + 1,
+							rank: (index * 8) + i + 1,
 							link: element.url
 						});
 
-						e.save(function (err, obj) {
+						r.save(function (err, obj) {
 							if (err) console.log('error while saving');
 						});
 
