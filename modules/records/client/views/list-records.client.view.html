@@ -9,13 +9,13 @@
 
   <div class="list-group">
     <a data-ng-repeat="keyword in keywords  | filter: searchText.search"
-       data-ui-sref="records.view({keyword: keyword})" class="list-group-item">
+       data-ui-sref="records.view({keyword: keyword._id})" class="list-group-item">
       <small>
-        <span data-ng-bind="keyword"></span>
+        <span>{{keyword._id}}</span>
       </small>
     </a>
   </div>
   <div class="alert alert-warning text-center" data-ng-if="keywords.$resolved && !keywords.length">
-    No records yet, why don't you launch your bot?
+    No results yet, why don't you launch your bot?
   </div>
 </section>

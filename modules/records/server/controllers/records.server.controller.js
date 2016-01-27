@@ -75,13 +75,17 @@ exports.delete = function (req, res) {
  */
 exports.list = function (req, res) {
 
-    Record.find().sort('keyword').populate('user', 'displayName').exec(function (err, records) {
+    Record.aggregate([{
+            $group: {
+                _id: '$keyword'
+            }}])
+        .exec(function (err, keywords) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)
             });
         } else {
-            res.json(records);
+            res.json(keywords);
         }
     });
 };

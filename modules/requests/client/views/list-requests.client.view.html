@@ -3,14 +3,12 @@
     <h1>{{title}}</h1>
   </div>
 
-  <div class="list-group">
-    <a data-ng-repeat="request in requests"
-       data-ui-sref="requests.view({date: date})" class="list-group-item">
-      <small>
-        <span data-ng-bind="request.date | date:'dd.MM.yyyy'"></span>
-        <span>Total Requests: {{request.count}}</span>
-      </small>
-    </a>
-  </div>
+  <ul class="list-group">
+    <li class="list-group-item" data-ng-repeat="request in requests | orderBy: ['-_id.day','-_id.month','-_id.year']">
+      {{request._id.day}}.{{request._id.month}}.{{request._id.year}}
+      <span class="badge">Requests: {{request.total}}</span>
+      <!--<span ng-if="$first" class="glyphicon glyphicon-play btn-md" ng-click="startRequest()"></span>-->
+    </li>
+  </ul>
 
 </section>

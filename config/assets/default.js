@@ -20,8 +20,7 @@ module.exports = {
                 'public/lib/angular-chart.js/dist/angular-chart.js',
                 'public/lib/api-check/dist/api-check.js',
                 'public/lib/angular-formly/dist/formly.js',
-                'public/lib/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
-                'public/lib/angular-momentjs/angular-momentjs.js'
+                'public/lib/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js'
             ],
             tests: ['public/lib/angular-mocks/angular-mocks.js']
         },

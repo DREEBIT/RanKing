@@ -1,11 +1,11 @@
 'use strict';
 
 // Articles controller
-angular.module('records').controller('RecordsController', ['$scope', '$stateParams', '$location', '$moment', 'Authentication', 'Records',
-    function ($scope, $stateParams, $location, $moment, Authentication, Records) {
+angular.module('records').controller('RecordsController', ['$scope', '$stateParams', '$location', 'Authentication', '$filter', 'Records',
+    function ($scope, $stateParams, $location, Authentication, $filter, Records) {
         $scope.authentication = Authentication;
 
-        $scope.title = 'Records for Keywords';
+        $scope.title = 'Results';
 
         $scope.fields = [
             {
@@ -92,28 +92,13 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
                 });
             });
             $scope.chart.labels.forEach(function(label, labelIndex){
-                $scope.chart.labels[labelIndex] = moment(label,'DD.MM.YYYY');
+                $scope.chart.labels[labelIndex] = $filter('date')(label,'dd.MM.yyyy');
             });
         };
 
         // Find a list of Keywords
         $scope.find = function () {
-            $scope.recordslist = Records.query(function(data){
-                data.filter(function(a){
-                        if (!this[a.keyword]) {
-                            this[a.keyword] = 1;
-                            $scope.keywords.push(a.keyword);
-                        }
-                    },
-                    {}
-                );
-            });
-
-            $scope.keywords = $scope.recordslist.filter(
-                function(a){if (!this[a]) {this[a] = 1; return a;}},
-                {}
-            );
-            console.log($scope.keywords);
+            $scope.keywords = Records.query();
         };
 
         // Find existing Records for Keyword

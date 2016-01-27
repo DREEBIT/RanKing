@@ -25,7 +25,7 @@ module.exports = {
     fetchKeyword: function(callback){
 
         var me = this;
-        var requestCount = 0;
+        var requestCount = this.settings.keywordsPerRun * this.settings.pageLimit;
         if (this.fetchKeywordIndizes.length > 0){
             var fetchIndex = this.fetchKeywordIndizes.shift();
             var index = fetchIndex % allKeywords.length;

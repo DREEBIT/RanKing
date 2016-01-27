@@ -27,7 +27,7 @@
             <tr data-ng-repeat="record in records | orderBy: ['date','rank'] | filter: record.date">
                 <td>{{record.rank}}</td>
                 <td>{{record.link}}</td>
-                <td>{{record.date | date: medium}}</td>
+                <td>{{record.date | date: 'dd.MM.yyyy'}}</td>
             </tr>
         </tbody>
     </table>
