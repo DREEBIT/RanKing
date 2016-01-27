@@ -8,8 +8,9 @@ angular.module('requests').controller('RequestsController', ['$scope', '$statePa
         $scope.title = 'Requests';
 
         // Find a list of Keywords
-        $scope.find = function () {
+        $scope.init = function () {
             $scope.requests = Requests.query(function(data){
+                console.log($scope.requests);
             });
         };
     }

@@ -7,7 +7,7 @@ angular.module('requests').config(['$stateProvider',
     $stateProvider
       .state('requests', {
         abstract: true,
-        url: '/records',
+        url: '/requests',
         template: '<ui-view/>',
         data: {
           roles: ['user', 'admin']

@@ -17,11 +17,11 @@ module.exports = {
                 'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
                 'public/lib/angular-file-upload/angular-file-upload.js',
                 'public/lib/chartjs/Chart.min.js',
-                'public/lib/Chart.js/Chart.min.js',
                 'public/lib/angular-chart.js/dist/angular-chart.js',
                 'public/lib/api-check/dist/api-check.js',
                 'public/lib/angular-formly/dist/formly.js',
-                'public/lib/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js'
+                'public/lib/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
+                'public/lib/angular-momentjs/angular-momentjs.js'
             ],
             tests: ['public/lib/angular-mocks/angular-mocks.js']
         },

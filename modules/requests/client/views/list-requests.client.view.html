@@ -1,5 +1,16 @@
-<section data-ng-controller="RequestsController" data-ng-init="find()">
+<section data-ng-controller="RequestsController" data-ng-init="init()">
   <div class="page-header">
     <h1>{{title}}</h1>
   </div>
+
+  <div class="list-group">
+    <a data-ng-repeat="request in requests"
+       data-ui-sref="requests.view({date: date})" class="list-group-item">
+      <small>
+        <span data-ng-bind="request.date | date:'dd.MM.yyyy'"></span>
+        <span>Total Requests: {{request.count}}</span>
+      </small>
+    </a>
+  </div>
+
 </section>

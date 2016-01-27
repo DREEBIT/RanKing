@@ -75,7 +75,7 @@ exports.delete = function (req, res) {
  */
 exports.list = function (req, res) {
 
-    Record.find().sort('-created').populate('user', 'displayName').exec(function (err, records) {
+    Record.find().sort('keyword').populate('user', 'displayName').exec(function (err, records) {
         if (err) {
             return res.status(400).send({
                 message: errorHandler.getErrorMessage(err)

@@ -12,10 +12,6 @@ module.exports = function (app) {
         .get(records.list)
         .post(records.create);
 
-    /*// Single keyword routes
-    app.route('/api/records/:keyword').all(recordsPolicy.isAllowed)
-        .get(records.list);*/
-
     app.route('/api/records/:keyword').all(recordsPolicy.isAllowed)
         .get(records.listKeywords);
 

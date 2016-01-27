@@ -1,8 +1,8 @@
 'use strict';
 
 // Articles controller
-angular.module('records').controller('RecordsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Records',
-    function ($scope, $stateParams, $location, Authentication, Records) {
+angular.module('records').controller('RecordsController', ['$scope', '$stateParams', '$location', '$moment', 'Authentication', 'Records',
+    function ($scope, $stateParams, $location, $moment, Authentication, Records) {
         $scope.authentication = Authentication;
 
         $scope.title = 'Records for Keywords';
@@ -47,7 +47,12 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
                 series: $scope.domainsToFilter,
                 data: [],
                 options: {
-                    bezierCurve: true
+                    scaleOverride : true,
+                    bezierCurve: true,
+                    scaleSteps : 5,
+                    scaleStepWidth : 8,
+                    scaleStartValue : 1,
+                    datasetFill : false
                 }
             };
             //Get recorded Dates
@@ -86,53 +91,8 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
                     }
                 });
             });
-        };
-
-        // Create new Record
-        $scope.create = function () {
-            // Create new Article object
-            var record = new Records({
-                title: this.title,
-                content: this.content
-            });
-
-            // Redirect after save
-            record.$save(function (response) {
-                $location.path('records/' + response._id);
-
-                // Clear form fields
-                $scope.title = '';
-                $scope.content = '';
-            }, function (errorResponse) {
-                $scope.error = errorResponse.data.message;
-            });
-        };
-
-        // Remove existing Record
-        $scope.remove = function (record) {
-            if (record) {
-                record.$remove();
-
-                for (var i in $scope.records) {
-                    if ($scope.records[i] === record) {
-                        $scope.records.splice(i, 1);
-                    }
-                }
-            } else {
-                $scope.record.$remove(function () {
-                    $location.path('records');
-                });
-            }
-        };
-
-        // Update existing Record
-        $scope.update = function () {
-            var record = $scope.record;
-
-            record.$update(function () {
-                $location.path('records/' + record._id);
-            }, function (errorResponse) {
-                $scope.error = errorResponse.data.message;
+            $scope.chart.labels.forEach(function(label, labelIndex){
+                $scope.chart.labels[labelIndex] = moment(label,'DD.MM.YYYY');
             });
         };
 
@@ -148,10 +108,12 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
                     {}
                 );
             });
-            $scope.keywords= $scope.recordslist.filter(
+
+            $scope.keywords = $scope.recordslist.filter(
                 function(a){if (!this[a]) {this[a] = 1; return a;}},
                 {}
             );
+            console.log($scope.keywords);
         };
 
         // Find existing Records for Keyword

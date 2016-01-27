@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 
 
 var Record = mongoose.model('Record');
+var Request = mongoose.model('Request');
 
 var allKeywords = require('../../../../config/keywords.json');
 
@@ -24,15 +25,27 @@ module.exports = {
     fetchKeyword: function(callback){
 
         var me = this;
+        var requestCount = 0;
         if (this.fetchKeywordIndizes.length > 0){
             var fetchIndex = this.fetchKeywordIndizes.shift();
             var index = fetchIndex % allKeywords.length;
             this.fetchPage(index,0,function(){
                 me.fetchKeyword(callback);
             });
+            requestCount++;
         }else {
             if (typeof callback === 'function'){
                 callback();
+
+                var re = new Request({
+                    date: me.date,
+                    count: requestCount
+                });
+
+                re.save(function (err, obj) {
+                    if (err) console.log('error while saving');
+                });
+
             }
         }
     },

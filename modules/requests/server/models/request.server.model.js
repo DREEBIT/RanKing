@@ -13,7 +13,7 @@ var RequestSchema = new Schema({
   date: {
     type: Date
   },
-  amount: {
+  count: {
     type: Number
   }
 });
