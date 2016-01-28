@@ -79,6 +79,7 @@ exports.list = function (req, res) {
             $group: {
                 _id: '$keyword'
             }}])
+        .sort('_id')
         .exec(function (err, keywords) {
         if (err) {
             return res.status(400).send({
