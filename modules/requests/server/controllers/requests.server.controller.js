@@ -7,7 +7,7 @@ var path = require('path'),
     mongoose = require('mongoose'),
     Request = mongoose.model('Request'),
     errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
-
+    var bot = require('../../../records/server/controllers/bot.server.controller');
 /**
  * List of Requests per day
  */
@@ -27,4 +27,9 @@ exports.list = function (req, res) {
             res.json(requests);
         }
     });
+};
+
+exports.doRequest = function (req, res) {
+
+    bot.start();
 };

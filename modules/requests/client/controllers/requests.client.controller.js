@@ -16,7 +16,7 @@ angular.module('requests').controller('RequestsController', ['$scope', '$statePa
         };
 
         $scope.startRequest = function(){
-            alert('halle');
+
         };
 
         $scope.isToday = function(obj){

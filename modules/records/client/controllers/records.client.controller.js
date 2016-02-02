@@ -84,7 +84,7 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
                 $scope.chart.series.forEach(function(serie, seriesIndex){
                     if (record.link.indexOf(serie) > -1) {
                         $scope.chart.labels.forEach(function(label, labelIndex){
-                            if (record.date.indexOf(label) > -1) {
+                            if (record.date.indexOf(label) > -1 && $scope.chart.data[seriesIndex][labelIndex] === null) {
                                 $scope.chart.data[seriesIndex][labelIndex] = record.rank;
                             }
                         });
@@ -109,6 +109,14 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
             }, function(){
 
                 $scope.populateChartData();
+            });
+        };
+
+        $scope.fill = function(record, seriesIndex){
+            $scope.chart.labels.forEach(function(label, labelIndex){
+                if (record.date.indexOf(label) > -1) {
+                    $scope.chart.data[seriesIndex][labelIndex] = record.rank;
+                }
             });
         };
     }
