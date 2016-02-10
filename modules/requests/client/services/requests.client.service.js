@@ -6,6 +6,9 @@ angular.module('requests').factory('Requests', ['$resource',
     return $resource('api/requests', {
 
     }, {
+      fetch: {
+        method: 'POST'
+      },
       update: {
         method: 'PUT'
       }

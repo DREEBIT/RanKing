@@ -15,8 +15,11 @@ angular.module('requests').controller('RequestsController', ['$scope', '$statePa
             $scope.requests = Requests.query();
         };
 
-        $scope.startRequest = function(){
-
+        $scope.fetchNext = function(){
+            console.log("fetch");
+            Requests.fetch({},function(){
+                console.log(arguments);
+            });
         };
 
         $scope.isToday = function(obj){

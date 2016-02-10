@@ -32,4 +32,9 @@ exports.list = function (req, res) {
 exports.doRequest = function (req, res) {
 
     bot.start();
+
+    res.json({
+        success: true,
+        message: "Bot Started"
+    });
 };

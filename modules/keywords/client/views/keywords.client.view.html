@@ -1,0 +1,51 @@
+<section data-ng-controller="KeywordsController">
+
+  <div class="page-header">
+    <h1>Keywords</h1>
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <tabset>
+          <tab heading="Single">
+            <form class="" name="add-single-form" ng-submit="onCreateSingle()">
+              <formly-form  model="newKeyword" fields="addSingleFields" >
+                <button type="submit" class="btn btn-primary submit-button">Add</button>
+              </formly-form>
+            </form>
+          </tab>
+          <tab heading="Multiple">
+            <form class="" name="add-multiple-form" ng-submit="onCreateMultiple()">
+              <formly-form  model="newKeywordList" fields="addMultipleFields" >
+                <button type="submit" class="btn btn-primary submit-button">Add</button>
+              </formly-form>
+            </form>
+          </tab>
+        </tabset>
+
+
+
+      </div>
+    </div>
+
+  </div>
+
+  <form name="search-form" novalidate>
+    <formly-form model="searchText" fields="searchFields" ></formly-form>
+  </form>
+
+  <div class="list-group">
+    <a data-ng-repeat="keyword in keywords  | filter: searchText.search" class="list-group-item">
+      <small>
+        <span>{{keyword.title}}</span>
+      </small>
+      <button ng-click="delete(keyword)" class="btn btn-danger btn-xs btn-primary pull-right">
+        <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+      </button>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" data-ng-if="keywords.$resolved && !keywords.length">
+    No Keywords yet, please add some
+  </div>
+
+</section>

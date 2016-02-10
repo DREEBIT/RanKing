@@ -15,6 +15,6 @@ var CronJob = require('cron').CronJob;
 new CronJob('00 0,3,6,9,12,15,18,21 * * *', function() {
 
     console.log('Starting Cron Job');
-    bot.start();
+    //bot.start();
 
 }, null, true, 'Europe/Berlin');

@@ -11,8 +11,9 @@ var mongoose = require('mongoose');
 
 var Record = mongoose.model('Record');
 var Request = mongoose.model('Request');
+var Keyword = mongoose.model('Keyword');
 
-var allKeywords = require('../../../../config/keywords.json');
+var allKeywords = [];//require('../../../../config/keywords.json');
 
 module.exports = {
 
@@ -120,13 +121,26 @@ module.exports = {
 
     start: function(){
 
+        var me = this;
         console.log('Start Requesting');
         this.date = new Date();
         this.settings = JSON.parse(fs.readFileSync('./config/settings.json', 'utf8'));
         this.fetchKeywordIndizes = _.range(this.settings.start, this.settings.start+this.settings.keywordsPerRun);
-        this.fetchKeyword(function(){
-            console.log('Done');
+
+        Keyword.find({},function(err, items){
+
+            if (!err){
+                allKeywords = items;
+
+                me.fetchKeyword(function(){
+                    console.log('Done');
+                });
+            }
+
         });
+
+
+
     },
 
     log: function(message){

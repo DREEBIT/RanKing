@@ -3,6 +3,14 @@
     <h1>{{title}}</h1>
   </div>
 
+  <div class="row">
+
+    <div class="col-md-12">
+      <button ng-click="fetchNext()" class="btn btn-default">Fetch Next Keywords</button>
+    </div>
+
+  </div>
+
   <ul class="list-group">
     <li class="list-group-item" data-ng-repeat="request in requests | orderBy: ['-_id.day','-_id.month','-_id.year']">
       {{request._id.day}}.{{request._id.month}}.{{request._id.year}}
