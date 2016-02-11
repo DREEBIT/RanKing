@@ -130,7 +130,12 @@ module.exports = {
         Keyword.find({},function(err, items){
 
             if (!err){
-                allKeywords = items;
+                var keywords = [];
+                items.forEach(function(item){
+                    keywords.push(item.title);
+                });
+
+                allKeywords = keywords;
 
                 me.fetchKeyword(function(){
                     console.log('Done');

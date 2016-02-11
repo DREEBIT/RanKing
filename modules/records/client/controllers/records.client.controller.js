@@ -14,8 +14,97 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
                 templateOptions: {
                     label: 'Search'
                 }
+            },
+            {
+                key: 'regex',
+                type: 'input',
+                templateOptions: {
+                    label: 'Regex',
+                    onChange: function(searchText){
+
+                        $scope.gridOptions.data = Records.query({
+                            linkRegex: searchText
+                        }, function(items){
+
+                        });
+
+                    }
+                }
+            },
+            {
+                key: 'rankRanges',
+                type: 'radio',
+                templateOptions: {
+                    label: 'Rank Ranges',
+                    options: [
+                        {
+                            range: {
+                                min: -1,
+                                max: 40
+                            },
+                            title : "All"
+                        },
+                        {
+                            range: {
+                                min: 1,
+                                max: 1
+                            },
+                            title : "1"
+                        },
+                        {
+                            range: {
+                                min: 2,
+                                max: 8
+                            },
+                            title : "2-8"
+                        },
+                        {
+                            range: {
+                                min: 9,
+                                max: 40
+                            },
+                            title : "> 9"
+                        },
+                        {
+                            range: {
+                                min: -1,
+                                max: 0
+                            },
+                            title : "No Rank"
+                        }
+                    ],
+                    valueProp: 'range',
+                    labelProp: 'title'
+                }
             }
         ];
+
+        $scope.byRange = function (fieldName, minValue, maxValue) {
+            if (minValue === undefined) minValue = Number.MIN_VALUE;
+            if (maxValue === undefined) maxValue = Number.MAX_VALUE;
+
+            return function predicateFunc(item) {
+                if (!item[fieldName]) return true;
+                return minValue <= item[fieldName] && item[fieldName] <= maxValue;
+            };
+        };
+
+        $scope.gridOptions = {
+            enableSorting: true,
+            enableFiltering: true,
+            columnDefs: [
+                {
+                    field: '_id',
+                    displayName: 'Keyword'
+                },
+                {
+                    enableFiltering: false,
+                    field: 'value',
+                    displayName: 'Rank',
+                    width: 100
+                }
+            ]
+        };
 
         $scope.viewfields = [
             {
@@ -98,7 +187,8 @@ angular.module('records').controller('RecordsController', ['$scope', '$statePara
 
         // Find a list of Keywords
         $scope.find = function () {
-            $scope.keywords = Records.query();
+
+            $scope.gridOptions.data = Records.query();
         };
 
 

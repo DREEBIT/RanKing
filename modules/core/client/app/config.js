@@ -14,7 +14,8 @@ var ApplicationConfiguration = (function () {
         'formly',
         'formlyBootstrap',
         'chart.js',
-        'toastr'
+        'toastr',
+        'ui.grid'
     ];
 
     // Add a new vertical module

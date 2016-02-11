@@ -7,15 +7,17 @@
     </form>
   </div>
 
+
   <div class="list-group">
-    <a data-ng-repeat="keyword in keywords  | filter: searchText.search"
-       data-ui-sref="records.view({keyword: keyword._id})" class="list-group-item">
+    <a data-ng-repeat="keyword in gridOptions.data | filter: searchText.search | filter: byRange('value', searchText.rankRanges.min, searchText.rankRanges.max)"
+       data-ui-sref="records.view({keyword: keyword._id})" class="list-group-item" ng-class="keyword.value < 0 ? 'list-group-item-danger' : keyword.value == 1 ? 'list-group-item-success' : keyword.value > 8 ? 'list-group-item-warning' : 'list-group-item-default'">
+      <span data-ng-if="keyword.value > 0" class="badge">{{keyword.value}}</span>
       <small>
         <span>{{keyword._id}}</span>
       </small>
     </a>
   </div>
-  <div class="alert alert-warning text-center" data-ng-if="keywords.$resolved && !keywords.length">
+  <div class="alert alert-warning text-center" data-ng-if="gridOptions.data.$resolved && !gridOptions.data.length">
     No results yet, why don't you launch your bot?
   </div>
 </section>

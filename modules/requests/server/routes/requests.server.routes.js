@@ -8,7 +8,7 @@ var requests = require('../controllers/requests.server.controller');
 
 module.exports = function (app) {
     // Requests collection routes
-    app.route('/api/requests').all(requestsPolicy.isAllowed)
+    app.route('/api/requests')
         .get(requests.list)
         .post(requests.doRequest);
 };

@@ -81,14 +81,63 @@ exports.list = function (req, res) {
             }}])
         .sort('_id')
         .exec(function (err, keywords) {
-        if (err) {
-            return res.status(400).send({
-                message: errorHandler.getErrorMessage(err)
-            });
-        } else {
-            res.json(keywords);
-        }
-    });
+            if (err) {
+                return res.status(400).send({
+                    message: errorHandler.getErrorMessage(err)
+                });
+            } else {
+
+                if (req.query.linkRegex){
+
+                    Record.mapReduce(
+                        {
+                            map: function(){
+                                emit(this.keyword, this.rank)
+                            },
+                            reduce: function(key, values){
+                                return values[0];
+                            },
+                            query: { link: { $regex: req.query.linkRegex}  },
+                            out: { inline: 1 }
+                        },
+                        function (err, mappedKeywords) {
+                            if (err) {
+                                return res.status(400).send({
+                                    message: errorHandler.getErrorMessage(err)
+                                });
+                            } else {
+
+                                var keywordsObject = {};
+
+                                mappedKeywords.forEach(function(item){
+                                    keywordsObject[item._id] = item;
+                                });
+
+                                keywords.forEach(function(item){
+                                    if (keywordsObject[item._id]){
+                                        item.value = keywordsObject[item._id].value;
+                                    }else {
+                                        item.value = -1;
+                                    }
+                                });
+
+                                res.json(keywords);
+                            }
+                        }
+                    )
+
+
+                }else {
+
+                    res.json(keywords);
+
+                }
+            }
+        });
+
+
+
+
 };
 /**
  * List of Records

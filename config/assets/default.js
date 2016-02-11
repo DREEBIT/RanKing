@@ -7,7 +7,8 @@ module.exports = {
                 'public/lib/bootstrap/dist/css/bootstrap.css',
                 'public/lib/bootstrap/dist/css/bootstrap-theme.css',
                 'public/lib/angular-chart.js/dist/angular-chart.min.css',
-                'public/lib/angular-toastr/dist/angular-toastr.css'
+                'public/lib/angular-toastr/dist/angular-toastr.css',
+                'public/lib/angular-ui-grid/ui-grid.min.css'
             ],
             js: [
                 'public/lib/angular/angular.js',
@@ -22,7 +23,8 @@ module.exports = {
                 'public/lib/api-check/dist/api-check.js',
                 'public/lib/angular-formly/dist/formly.js',
                 'public/lib/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
-                'public/lib/angular-toastr/dist/angular-toastr.tpls.min.js'
+                'public/lib/angular-toastr/dist/angular-toastr.tpls.min.js',
+                'public/lib/angular-ui-grid/ui-grid.min.js'
             ],
             tests: ['public/lib/angular-mocks/angular-mocks.js']
         },
