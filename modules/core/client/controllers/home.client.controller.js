@@ -3,7 +3,7 @@
 angular.module('core').controller('HomeController', ['$scope',
     function ($scope) {
 
-        $scope.title = 'Google Search Analyser';
+        $scope.title = 'RanKing';
 
         $scope.description = 'A tool, for analysing google search ranking';
     }
