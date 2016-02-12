@@ -19,7 +19,8 @@
     "angular-chartjs-directive": "~1.0.0",
     "angular-toastr": "~1.7.0",
     "angular-ui-select3": "ui-select#*",
-    "angular-ui-grid": "~3.1.1"
+    "angular-ui-grid": "~3.1.1",
+    "ngstorage": "~0.3.10"
   },
   "resolutions": {
     "angular": "~1.3"

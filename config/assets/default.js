@@ -24,7 +24,8 @@ module.exports = {
                 'public/lib/angular-formly/dist/formly.js',
                 'public/lib/angular-formly-templates-bootstrap/dist/angular-formly-templates-bootstrap.js',
                 'public/lib/angular-toastr/dist/angular-toastr.tpls.min.js',
-                'public/lib/angular-ui-grid/ui-grid.min.js'
+                'public/lib/angular-ui-grid/ui-grid.min.js',
+                'public/lib/ngstorage/ngStorage.min.js'
             ],
             tests: ['public/lib/angular-mocks/angular-mocks.js']
         },

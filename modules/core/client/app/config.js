@@ -15,7 +15,8 @@ var ApplicationConfiguration = (function () {
         'formlyBootstrap',
         'chart.js',
         'toastr',
-        'ui.grid'
+        'ui.grid',
+        'ngStorage'
     ];
 
     // Add a new vertical module
