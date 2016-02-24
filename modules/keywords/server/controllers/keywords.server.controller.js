@@ -14,7 +14,7 @@ var path = require('path'),
 
 exports.create = function (req, res) {
 
-    if (req.param("insert")=="multiple"){
+    if (req.param('insert')==='multiple'){
 
         Keyword.collection.insert(req.body,function (err, keywords) {
             if (err) {
